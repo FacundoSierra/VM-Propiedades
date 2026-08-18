@@ -1,5 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
+import BuyerValuationForm from "@/components/forms/BuyerValuationForm";
+import ValuationForm from "@/components/forms/ValuationForm";
 import PropertyCard from "@/components/PropertyCard";
 import Reveal from "@/components/Reveal";
 import SectionHeading from "@/components/SectionHeading";
@@ -81,6 +83,40 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Solicita tu Valoración Gratuita */}
+      <section className="mx-auto max-w-7xl px-5 py-24 md:px-8">
+        <Reveal>
+          <SectionHeading
+            eyebrow="Valoración gratuita"
+            title="Solicita tu Valoración Gratuita"
+            subtitle="Rellena el formulario correspondiente y uno de nuestros expertos se pondrá en contacto contigo para programar una visita y realizar la valoración de tu inmueble."
+            align="center"
+          />
+        </Reveal>
+        <div className="mt-12 grid gap-8 lg:grid-cols-2">
+          <Reveal>
+            <div className="h-full border border-line bg-white p-6 md:p-10">
+              <p className="font-serif text-xl text-graphite">
+                Formulario para Vendedores
+              </p>
+              <div className="mt-6">
+                <ValuationForm />
+              </div>
+            </div>
+          </Reveal>
+          <Reveal delay={0.08}>
+            <div className="h-full border border-line bg-white p-6 md:p-10">
+              <p className="font-serif text-xl text-graphite">
+                Formulario para Compradores
+              </p>
+              <div className="mt-6">
+                <BuyerValuationForm />
+              </div>
+            </div>
+          </Reveal>
+        </div>
+      </section>
+
       {/* Inmuebles destacados */}
       <section className="mx-auto max-w-7xl px-5 py-24 md:px-8">
         <Reveal>
@@ -111,11 +147,20 @@ export default function Home() {
       <section className="bg-cream-dark py-24">
         <div className="mx-auto max-w-7xl px-5 md:px-8">
           <Reveal>
-            <SectionHeading
-              eyebrow="Qué hacemos"
-              title="Servicios Personalizados para Compradores y Vendedores"
-              subtitle="En VM Propiedades, entendemos que cada cliente es único. Por eso, ofrecemos servicios personalizados que se adaptan a tus necesidades específicas. Si estás comprando, te guiaremos en cada paso del proceso, desde la búsqueda de la propiedad ideal hasta la negociación del precio y el cierre de la venta. Si estás vendiendo, te ayudaremos a promocionar tu propiedad de manera efectiva y a encontrar el comprador adecuado en el menor tiempo posible."
-            />
+            <div className="flex items-center justify-between gap-12">
+              <SectionHeading
+                eyebrow="Qué hacemos"
+                title="Servicios Personalizados para Compradores y Vendedores"
+                subtitle="En VM Propiedades, entendemos que cada cliente es único. Por eso, ofrecemos servicios personalizados que se adaptan a tus necesidades específicas. Si estás comprando, te guiaremos en cada paso del proceso, desde la búsqueda de la propiedad ideal hasta la negociación del precio y el cierre de la venta. Si estás vendiendo, te ayudaremos a promocionar tu propiedad de manera efectiva y a encontrar el comprador adecuado en el menor tiempo posible."
+              />
+              <Image
+                src="/logo.png"
+                alt="VM Propiedades"
+                width={490}
+                height={664}
+                className="hidden h-64 w-auto shrink-0 lg:block"
+              />
+            </div>
           </Reveal>
           <div className="mt-12 grid gap-px overflow-hidden border border-line bg-line sm:grid-cols-2 lg:grid-cols-3">
             {services.map((s, i) => (
@@ -204,23 +249,21 @@ export default function Home() {
         </div>
       </section>
 
-      {/* CTA valoración */}
+      {/* CTA contacto */}
       <section className="mx-auto max-w-7xl px-5 py-24 md:px-8">
         <Reveal>
           <div className="bg-terracotta px-8 py-16 text-center text-cream md:px-16">
             <h2 className="mx-auto max-w-2xl font-serif text-3xl leading-tight md:text-4xl">
-              Solicita tu Valoración Gratuita
+              ¡Contáctanos hoy mismo!
             </h2>
             <p className="mx-auto mt-4 max-w-xl text-sm leading-relaxed text-cream/85 md:text-base">
-              Rellena el formulario correspondiente y uno de nuestros expertos
-              se pondrá en contacto contigo para programar una visita y
-              realizar la valoración de tu inmueble.
+              descubre todo lo que VM Propiedades tiene para ofrecerte
             </p>
             <Link
-              href="/valoracion"
+              href="/contacto"
               className="mt-8 inline-block bg-cream px-8 py-4 text-[13px] font-medium uppercase tracking-widest text-graphite transition-colors hover:bg-white"
             >
-              Solicitar valoración gratuita
+              Contáctanos
             </Link>
             <p className="mt-6 text-xs text-cream/70">
               O llámanos directamente:{" "}

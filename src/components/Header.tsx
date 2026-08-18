@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useSyncExternalStore } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { nav, site } from "@/lib/site";
@@ -32,22 +33,24 @@ export default function Header() {
           : "bg-transparent"
       }`}
     >
-      <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-5 md:px-8">
-        <Link
-          href="/"
-          className={`font-serif text-xl tracking-tight transition-colors ${
-            solid ? "text-graphite" : "text-white"
-          }`}
-        >
-          VM <span className="text-gold">Propiedades</span>
+      <div className="mx-auto grid h-24 max-w-7xl grid-cols-[auto_1fr_auto] items-center gap-6 px-5 md:px-8">
+        <Link href="/" aria-label="Ir al inicio" className="shrink-0 justify-self-start">
+          <Image
+            src="/logo.png"
+            alt="VM Propiedades"
+            width={490}
+            height={664}
+            priority
+            className="h-16 w-auto"
+          />
         </Link>
 
-        <nav className="hidden items-center gap-7 lg:flex">
-          {nav.slice(1).map((item) => (
+        <nav className="hidden items-center justify-center gap-6 xl:flex">
+          {nav.map((item) => (
             <Link
               key={item.href}
               href={item.href}
-              className={`text-[13px] font-medium uppercase tracking-widest transition-colors ${
+              className={`whitespace-nowrap text-sm font-medium uppercase tracking-wide transition-colors ${
                 pathname === item.href
                   ? "text-terracotta"
                   : solid
@@ -58,24 +61,25 @@ export default function Header() {
               {item.label}
             </Link>
           ))}
-          <Link
-            href="/valoracion"
-            className={`border px-5 py-2.5 text-[13px] font-medium uppercase tracking-widest transition-colors ${
-              solid
-                ? "border-terracotta bg-terracotta text-cream hover:bg-terracotta-dark"
-                : "border-white/70 text-white hover:bg-white hover:text-graphite"
-            }`}
-          >
-            Valoración gratuita
-          </Link>
         </nav>
+
+        <Link
+          href="/valoracion"
+          className={`hidden whitespace-nowrap border px-5 py-3 text-sm font-medium uppercase tracking-wide transition-colors xl:inline-block xl:justify-self-end ${
+            solid
+              ? "border-terracotta bg-terracotta text-cream hover:bg-terracotta-dark"
+              : "border-white/70 text-white hover:bg-white hover:text-graphite"
+          }`}
+        >
+          Valoración gratuita
+        </Link>
 
         <button
           type="button"
           aria-label={open ? "Cerrar menú" : "Abrir menú"}
           aria-expanded={open}
           onClick={() => setOpen((v) => !v)}
-          className={`flex h-10 w-10 flex-col items-center justify-center gap-1.5 lg:hidden ${
+          className={`col-start-3 flex h-10 w-10 flex-col items-center justify-center justify-self-end gap-1.5 xl:hidden ${
             solid ? "text-graphite" : "text-white"
           }`}
         >
@@ -89,7 +93,7 @@ export default function Header() {
       </div>
 
       {open && (
-        <nav className="border-t border-line bg-cream px-5 pb-8 pt-4 lg:hidden">
+        <nav className="border-t border-line bg-cream px-5 pb-8 pt-4 xl:hidden">
           <ul className="flex flex-col">
             {nav.map((item) => (
               <li key={item.href}>
