@@ -1,1 +1,19 @@
-[]
+[
+  {
+    "slug": "casa-en-vallecas",
+    "title": "Casa en Vallecas",
+    "type": "piso",
+    "operation": "venta",
+    "status": "disponible",
+    "price": 300000,
+    "zone": "Madrid",
+    "address": "Puentedey",
+    "sqm": 90,
+    "rooms": 2,
+    "baths": 2,
+    "description": "dadadadadadadadadad",
+    "features": [],
+    "images": [],
+    "featured": true
+  }
+]
