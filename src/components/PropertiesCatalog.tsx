@@ -1,8 +1,13 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import type { Operation, Property, PropertyType } from "@/data/properties";
-import { propertyTypeLabels } from "@/data/properties";
+import type {
+  Operation,
+  Property,
+  PropertyStatus,
+  PropertyType,
+} from "@/data/properties";
+import { propertyStatusLabels, propertyTypeLabels } from "@/data/properties";
 import PropertyCard from "./PropertyCard";
 
 interface PropertiesCatalogProps {
@@ -28,19 +33,21 @@ export default function PropertiesCatalog({
   const [type, setType] = useState<PropertyType | "todas">("todas");
   const [zone, setZone] = useState<string>("todas");
   const [priceRange, setPriceRange] = useState<string>("todas");
+  const [status, setStatus] = useState<PropertyStatus | "todas">("todas");
 
   const filtered = useMemo(() => {
     return properties.filter((p) => {
       if (operation !== "todas" && p.operation !== operation) return false;
       if (type !== "todas" && p.type !== type) return false;
       if (zone !== "todas" && p.zone !== zone) return false;
+      if (status !== "todas" && p.status !== status) return false;
       if (priceRange !== "todas" && p.operation === "venta") {
         const [min, max] = priceRange.split("-").map(Number);
         if (p.price < min || p.price > max) return false;
       }
       return true;
     });
-  }, [properties, operation, type, zone, priceRange]);
+  }, [properties, operation, type, zone, status, priceRange]);
 
   if (properties.length === 0) {
     return (
@@ -109,6 +116,25 @@ export default function PropertiesCatalog({
             {zones.map((z) => (
               <option key={z} value={z}>
                 {z}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <div>
+          <label htmlFor="filtro-estado" className="form-label">
+            Estado
+          </label>
+          <select
+            id="filtro-estado"
+            value={status}
+            onChange={(e) => setStatus(e.target.value as PropertyStatus | "todas")}
+            className="field w-44"
+          >
+            <option value="todas">Todos los estados</option>
+            {Object.entries(propertyStatusLabels).map(([value, label]) => (
+              <option key={value} value={value}>
+                {label}
               </option>
             ))}
           </select>

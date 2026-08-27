@@ -1,10 +1,17 @@
 import Image from "next/image";
 import Link from "next/link";
 import type { Property } from "@/data/properties";
-import { propertyTypeLabels } from "@/data/properties";
+import { propertyStatusLabels, propertyTypeLabels } from "@/data/properties";
 import { formatPrice } from "@/lib/site";
 
+const statusBadgeStyles: Record<string, string> = {
+  reservado: "bg-[#b8860b]/90",
+  vendido: "bg-graphite/90",
+};
+
 export default function PropertyCard({ property }: { property: Property }) {
+  const notAvailable = property.status !== "disponible";
+
   return (
     <Link
       href={`/inmuebles/${property.slug}`}
@@ -16,11 +23,18 @@ export default function PropertyCard({ property }: { property: Property }) {
           alt={property.title}
           fill
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-          className="object-cover transition-transform duration-700 group-hover:scale-105"
+          className={`object-cover transition-transform duration-700 group-hover:scale-105 ${notAvailable ? "grayscale" : ""}`}
         />
         <span className="absolute left-4 top-4 bg-graphite/80 px-3 py-1 text-[11px] font-medium uppercase tracking-widest text-cream backdrop-blur-sm">
           {property.operation === "venta" ? "En venta" : "En alquiler"}
         </span>
+        {notAvailable && (
+          <span
+            className={`absolute right-4 top-4 px-3 py-1 text-[11px] font-medium uppercase tracking-widest text-cream backdrop-blur-sm ${statusBadgeStyles[property.status]}`}
+          >
+            {propertyStatusLabels[property.status]}
+          </span>
+        )}
       </div>
       <div className="p-5">
         <p className="text-[11px] font-medium uppercase tracking-widest text-gold">

@@ -1,3 +1,5 @@
+import propertiesData from "./properties.json";
+
 export type PropertyType =
   | "piso"
   | "atico"
@@ -8,11 +10,14 @@ export type PropertyType =
 
 export type Operation = "venta" | "alquiler";
 
+export type PropertyStatus = "disponible" | "reservado" | "vendido";
+
 export interface Property {
   slug: string;
   title: string;
   type: PropertyType;
   operation: Operation;
+  status: PropertyStatus;
   price: number;
   zone: string;
   address: string;
@@ -34,14 +39,21 @@ export const propertyTypeLabels: Record<PropertyType, string> = {
   local: "Local comercial",
 };
 
+export const propertyStatusLabels: Record<PropertyStatus, string> = {
+  disponible: "Disponible",
+  reservado: "Reservado",
+  vendido: "Vendido",
+};
+
 /**
  * Cartera de inmuebles.
  *
- * Vacío a propósito: los inmuebles de ejemplo (ficticios) se han retirado.
- * Cuando exista un panel de gestión, este array se sustituirá por datos
- * reales (o por una consulta a la fuente que los almacene).
+ * La fuente de la verdad es `properties.json`, en este mismo directorio.
+ * El panel de administración (/admin) modifica ese archivo mediante un
+ * commit directo al repositorio de GitHub, lo que dispara un despliegue
+ * normal en Vercel.
  */
-export const properties: Property[] = [];
+export const properties: Property[] = propertiesData as Property[];
 
 export const zones = [...new Set(properties.map((p) => p.zone))].sort();
 
@@ -50,5 +62,5 @@ export function getProperty(slug: string) {
 }
 
 export function getFeatured() {
-  return properties.filter((p) => p.featured);
+  return properties.filter((p) => p.featured && p.status === "disponible");
 }

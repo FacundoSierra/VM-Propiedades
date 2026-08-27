@@ -20,6 +20,8 @@ export default function Header() {
   );
   const [open, setOpen] = useState(false);
 
+  if (pathname?.startsWith("/admin")) return null;
+
   // Solo la home tiene hero a pantalla completa bajo el header transparente
   const transparentStart = pathname === "/";
 

@@ -7,6 +7,7 @@ import PropertyGallery from "@/components/PropertyGallery";
 import {
   getProperty,
   properties,
+  propertyStatusLabels,
   propertyTypeLabels,
 } from "@/data/properties";
 import { formatPrice, site } from "@/lib/site";
@@ -78,6 +79,8 @@ export default async function PropertyPage({ params }: Props) {
             <div className="text-right">
               <p className="text-xs uppercase tracking-widest text-gold">
                 {property.operation === "venta" ? "En venta" : "En alquiler"}
+                {property.status !== "disponible" &&
+                  ` · ${propertyStatusLabels[property.status]}`}
               </p>
               <p className="mt-1 font-serif text-3xl md:text-4xl">
                 {formatPrice(property.price, property.operation)}
