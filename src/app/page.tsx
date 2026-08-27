@@ -118,30 +118,32 @@ export default function Home() {
       </section>
 
       {/* Inmuebles destacados */}
-      <section className="mx-auto max-w-7xl px-5 py-24 md:px-8">
-        <Reveal>
-          <div className="flex flex-wrap items-end justify-between gap-6">
-            <SectionHeading
-              eyebrow="Selección"
-              title="Inmuebles destacados"
-              subtitle="Una muestra de nuestra cartera actual en los mejores barrios de Madrid."
-            />
-            <Link
-              href="/inmuebles"
-              className="border-b border-terracotta pb-1 text-[13px] font-medium uppercase tracking-widest text-terracotta transition-colors hover:text-terracotta-dark"
-            >
-              Ver todo el catálogo
-            </Link>
+      {featured.length > 0 && (
+        <section className="mx-auto max-w-7xl px-5 py-24 md:px-8">
+          <Reveal>
+            <div className="flex flex-wrap items-end justify-between gap-6">
+              <SectionHeading
+                eyebrow="Selección"
+                title="Inmuebles destacados"
+                subtitle="Una muestra de nuestra cartera actual en los mejores barrios de Madrid."
+              />
+              <Link
+                href="/inmuebles"
+                className="border-b border-terracotta pb-1 text-[13px] font-medium uppercase tracking-widest text-terracotta transition-colors hover:text-terracotta-dark"
+              >
+                Ver todo el catálogo
+              </Link>
+            </div>
+          </Reveal>
+          <div className="mt-12 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+            {featured.map((p, i) => (
+              <Reveal key={p.slug} delay={i * 0.08}>
+                <PropertyCard property={p} />
+              </Reveal>
+            ))}
           </div>
-        </Reveal>
-        <div className="mt-12 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
-          {featured.map((p, i) => (
-            <Reveal key={p.slug} delay={i * 0.08}>
-              <PropertyCard property={p} />
-            </Reveal>
-          ))}
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* Servicios */}
       <section className="bg-cream-dark py-24">

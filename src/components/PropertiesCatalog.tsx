@@ -42,6 +42,20 @@ export default function PropertiesCatalog({
     });
   }, [properties, operation, type, zone, priceRange]);
 
+  if (properties.length === 0) {
+    return (
+      <div className="border border-line bg-white p-12 text-center">
+        <p className="font-serif text-xl text-graphite">
+          Estamos actualizando nuestra cartera
+        </p>
+        <p className="mx-auto mt-2 max-w-md text-sm text-graphite-soft">
+          Ahora mismo no tenemos inmuebles publicados en la web. Cuéntanos qué
+          buscas y te avisamos en cuanto entre en cartera algo que encaje.
+        </p>
+      </div>
+    );
+  }
+
   return (
     <div>
       <div className="flex flex-wrap items-end gap-4 border-b border-line pb-8">
