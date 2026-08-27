@@ -1,5 +1,6 @@
 "use client";
 
+import { upload } from "@vercel/blob/client";
 import { useRouter } from "next/navigation";
 import { useState, type FormEvent } from "react";
 import type {
@@ -69,13 +70,18 @@ export default function PropertyForm({ initial }: PropertyFormProps) {
 
   async function uploadOne(item: PendingImage) {
     try {
-      const body = new FormData();
-      body.append("file", item.file);
-      const res = await fetch("/api/admin/upload", { method: "POST", body });
-      const json = await res.json();
-      if (!res.ok) throw new Error(json.error ?? "Error subiendo imagen");
+      // Sube directamente desde el navegador a Vercel Blob (no pasa por
+      // nuestro servidor), así no hay límite de 4,5 MB por foto.
+      const blob = await upload(
+        `inmuebles/${Date.now()}-${item.file.name}`,
+        item.file,
+        {
+          access: "public",
+          handleUploadUrl: "/api/admin/upload",
+        },
+      );
 
-      setForm((f) => ({ ...f, images: [...f.images, json.url] }));
+      setForm((f) => ({ ...f, images: [...f.images, blob.url] }));
       setPending((prev) => prev.filter((p) => p.id !== item.id));
       URL.revokeObjectURL(item.previewUrl);
     } catch (e) {
