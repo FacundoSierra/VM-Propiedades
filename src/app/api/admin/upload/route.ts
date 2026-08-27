@@ -23,8 +23,10 @@ export async function POST(request: Request) {
     return NextResponse.json({ url: blob.url });
   } catch (e) {
     console.error("[admin/upload] Error subiendo imagen:", e);
+    // Ruta solo accesible para el admin autenticado: es seguro mostrar el
+    // motivo real del error para poder diagnosticarlo desde el propio panel.
     return NextResponse.json(
-      { error: "No se pudo subir la imagen" },
+      { error: e instanceof Error ? e.message : "No se pudo subir la imagen" },
       { status: 500 },
     );
   }

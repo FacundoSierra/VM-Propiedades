@@ -14,6 +14,14 @@ interface PropertyFormProps {
   initial?: Property;
 }
 
+interface PendingImage {
+  id: string;
+  file: File;
+  previewUrl: string;
+  status: "uploading" | "error";
+  error?: string;
+}
+
 export default function PropertyForm({ initial }: PropertyFormProps) {
   const router = useRouter();
   const isEdit = Boolean(initial);
@@ -34,34 +42,70 @@ export default function PropertyForm({ initial }: PropertyFormProps) {
     images: initial?.images ?? ([] as string[]),
     featured: initial?.featured ?? false,
   });
-  const [uploading, setUploading] = useState(false);
+  const [pending, setPending] = useState<PendingImage[]>([]);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  const uploading = pending.some((p) => p.status === "uploading");
 
   function update<K extends keyof typeof form>(key: K, value: (typeof form)[K]) {
     setForm((f) => ({ ...f, [key]: value }));
   }
 
-  async function handleFiles(files: FileList | null) {
+  function handleFiles(files: FileList | null) {
     if (!files || files.length === 0) return;
-    setUploading(true);
-    setError(null);
+
+    const toUpload: PendingImage[] = Array.from(files).map((file) => ({
+      id: `${Date.now()}-${Math.random().toString(36).slice(2)}`,
+      file,
+      previewUrl: URL.createObjectURL(file),
+      status: "uploading" as const,
+    }));
+
+    // Vista previa instantánea: aparecen ya, sin esperar a que terminen de subir.
+    setPending((prev) => [...prev, ...toUpload]);
+    toUpload.forEach(uploadOne);
+  }
+
+  async function uploadOne(item: PendingImage) {
     try {
-      const uploaded: string[] = [];
-      for (const file of Array.from(files)) {
-        const body = new FormData();
-        body.append("file", file);
-        const res = await fetch("/api/admin/upload", { method: "POST", body });
-        const json = await res.json();
-        if (!res.ok) throw new Error(json.error ?? "Error subiendo imagen");
-        uploaded.push(json.url);
-      }
-      update("images", [...form.images, ...uploaded]);
+      const body = new FormData();
+      body.append("file", item.file);
+      const res = await fetch("/api/admin/upload", { method: "POST", body });
+      const json = await res.json();
+      if (!res.ok) throw new Error(json.error ?? "Error subiendo imagen");
+
+      setForm((f) => ({ ...f, images: [...f.images, json.url] }));
+      setPending((prev) => prev.filter((p) => p.id !== item.id));
+      URL.revokeObjectURL(item.previewUrl);
     } catch (e) {
-      setError(e instanceof Error ? e.message : "Error subiendo imágenes");
-    } finally {
-      setUploading(false);
+      setPending((prev) =>
+        prev.map((p) =>
+          p.id === item.id
+            ? {
+                ...p,
+                status: "error",
+                error: e instanceof Error ? e.message : "Error al subir",
+              }
+            : p,
+        ),
+      );
     }
+  }
+
+  function retryUpload(item: PendingImage) {
+    setPending((prev) =>
+      prev.map((p) => (p.id === item.id ? { ...p, status: "uploading", error: undefined } : p)),
+    );
+    uploadOne(item);
+  }
+
+  function discardPending(id: string) {
+    setPending((prev) => {
+      const item = prev.find((p) => p.id === id);
+      if (item) URL.revokeObjectURL(item.previewUrl);
+      return prev.filter((p) => p.id !== id);
+    });
   }
 
   function removeImage(url: string) {
@@ -69,6 +113,10 @@ export default function PropertyForm({ initial }: PropertyFormProps) {
       "images",
       form.images.filter((i) => i !== url),
     );
+  }
+
+  function makeCover(url: string) {
+    update("images", [url, ...form.images.filter((i) => i !== url)]);
   }
 
   async function handleSubmit(e: FormEvent) {
@@ -262,30 +310,91 @@ export default function PropertyForm({ initial }: PropertyFormProps) {
           type="file"
           accept="image/*"
           multiple
-          onChange={(e) => handleFiles(e.target.files)}
-          disabled={uploading}
+          onChange={(e) => {
+            handleFiles(e.target.files);
+            e.target.value = "";
+          }}
           className="block text-sm text-graphite-soft"
         />
-        {uploading && (
-          <p className="mt-2 text-xs text-graphite-soft">Subiendo…</p>
-        )}
-        {form.images.length > 0 && (
+        <p className="mt-1 text-xs text-graphite-soft">
+          La primera foto (marcada como "Portada") es la que se ve en el
+          catálogo. Pasa el ratón sobre una foto para quitarla o marcarla
+          como portada.
+        </p>
+
+        {(form.images.length > 0 || pending.length > 0) && (
           <div className="mt-3 grid grid-cols-3 gap-3 sm:grid-cols-4">
-            {form.images.map((url) => (
+            {form.images.map((url, i) => (
               <div
                 key={url}
-                className="relative aspect-square overflow-hidden border border-line"
+                className="group relative aspect-square overflow-hidden border border-line"
               >
                 {/* Vista previa en el panel: no requiere next/image */}
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img src={url} alt="" className="h-full w-full object-cover" />
-                <button
-                  type="button"
-                  onClick={() => removeImage(url)}
-                  className="absolute right-1 top-1 bg-graphite/80 px-1.5 py-0.5 text-[10px] uppercase tracking-widest text-cream"
-                >
-                  Quitar
-                </button>
+                {i === 0 && (
+                  <span className="absolute left-1 top-1 bg-terracotta px-1.5 py-0.5 text-[10px] uppercase tracking-widest text-cream">
+                    Portada
+                  </span>
+                )}
+                <div className="absolute inset-0 flex items-end justify-center gap-1 bg-graphite/0 p-1.5 opacity-0 transition-opacity group-hover:bg-graphite/40 group-hover:opacity-100">
+                  {i !== 0 && (
+                    <button
+                      type="button"
+                      onClick={() => makeCover(url)}
+                      className="bg-cream px-1.5 py-0.5 text-[10px] uppercase tracking-widest text-graphite"
+                    >
+                      Portada
+                    </button>
+                  )}
+                  <button
+                    type="button"
+                    onClick={() => removeImage(url)}
+                    className="bg-graphite px-1.5 py-0.5 text-[10px] uppercase tracking-widest text-cream"
+                  >
+                    Quitar
+                  </button>
+                </div>
+              </div>
+            ))}
+
+            {pending.map((item) => (
+              <div
+                key={item.id}
+                className="relative aspect-square overflow-hidden border border-line"
+              >
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={item.previewUrl}
+                  alt=""
+                  className={`h-full w-full object-cover ${item.status === "uploading" ? "opacity-60" : "opacity-40"}`}
+                />
+                {item.status === "uploading" && (
+                  <span className="absolute inset-x-0 bottom-0 bg-graphite/80 px-1.5 py-1 text-center text-[10px] uppercase tracking-widest text-cream">
+                    Subiendo…
+                  </span>
+                )}
+                {item.status === "error" && (
+                  <div className="absolute inset-0 flex flex-col items-center justify-center gap-1 bg-graphite/80 p-1.5 text-center">
+                    <span className="text-[10px] text-cream">{item.error}</span>
+                    <div className="flex gap-1">
+                      <button
+                        type="button"
+                        onClick={() => retryUpload(item)}
+                        className="bg-terracotta px-1.5 py-0.5 text-[10px] uppercase tracking-widest text-cream"
+                      >
+                        Reintentar
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => discardPending(item.id)}
+                        className="bg-cream px-1.5 py-0.5 text-[10px] uppercase tracking-widest text-graphite"
+                      >
+                        Quitar
+                      </button>
+                    </div>
+                  </div>
+                )}
               </div>
             ))}
           </div>
@@ -299,7 +408,7 @@ export default function PropertyForm({ initial }: PropertyFormProps) {
           onChange={(e) => update("featured", e.target.checked)}
           className="h-4 w-4 accent-terracotta"
         />
-        Destacar en la portada
+        Destacar en la portada del inicio
       </label>
 
       <button
