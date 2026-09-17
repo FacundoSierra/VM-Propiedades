@@ -323,7 +323,7 @@ export default function PropertyForm({ initial }: PropertyFormProps) {
           className="block text-sm text-graphite-soft"
         />
         <p className="mt-1 text-xs text-graphite-soft">
-          La primera foto (marcada como "Portada") es la que se ve en el
+          La primera foto (marcada como «Portada») es la que se ve en el
           catálogo. Pasa el ratón sobre una foto para quitarla o marcarla
           como portada.
         </p>
