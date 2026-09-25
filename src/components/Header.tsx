@@ -47,7 +47,7 @@ export default function Header() {
             width={519}
             height={700}
             priority
-            className={`h-24 w-auto ${solid ? "" : "brightness-0 invert"}`}
+            className="h-24 w-auto"
           />
         </Link>
 
