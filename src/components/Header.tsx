@@ -36,14 +36,18 @@ export default function Header() {
       }`}
     >
       <div className="mx-auto grid h-24 max-w-7xl grid-cols-[auto_1fr_auto] items-center gap-6 px-5 md:px-8">
-        <Link href="/" aria-label="Ir al inicio" className="flex shrink-0 items-center gap-2.5 justify-self-start">
+        <Link
+          href="/"
+          aria-label="Ir al inicio"
+          className="flex shrink-0 items-center gap-3 justify-self-start"
+        >
           <Image
             src="/logo-m.png"
             alt=""
             width={392}
             height={400}
             priority
-            className={`h-11 w-auto shrink-0 ${solid ? '' : 'brightness-0 invert'}`}
+            className={`h-14 w-auto shrink-0 ${solid ? "" : "brightness-0 invert"}`}
           />
           <Image
             src="/logo-palabra.png"
@@ -51,27 +55,29 @@ export default function Header() {
             width={1350}
             height={90}
             priority
-            className={`h-2.5 w-auto shrink-0 ${solid ? '' : 'brightness-0 invert'}`}
+            className={`h-3.5 w-auto shrink-0 ${solid ? "" : "brightness-0 invert"}`}
           />
           <span className="sr-only">VM Propiedades</span>
         </Link>
 
-        <nav className="hidden items-center justify-center gap-4 xl:flex">
-          {nav.map((item) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              className={`whitespace-nowrap text-[13px] font-medium uppercase tracking-wide transition-colors ${
-                pathname === item.href
-                  ? "text-terracotta"
-                  : solid
-                    ? "text-graphite-soft hover:text-terracotta"
-                    : "text-white/85 hover:text-white"
-              }`}
-            >
-              {item.label}
-            </Link>
-          ))}
+        <nav className="hidden items-center justify-center gap-3.5 xl:flex">
+          {nav
+            .filter((item) => item.href !== "/")
+            .map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className={`whitespace-nowrap text-[13px] font-medium uppercase tracking-wide transition-colors ${
+                  pathname === item.href
+                    ? "text-terracotta"
+                    : solid
+                      ? "text-graphite-soft hover:text-terracotta"
+                      : "text-white/85 hover:text-white"
+                }`}
+              >
+                {item.label}
+              </Link>
+            ))}
         </nav>
 
         <Link
