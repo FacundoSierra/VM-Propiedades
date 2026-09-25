@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { nav, site } from "@/lib/site";
@@ -19,9 +20,14 @@ export default function Footer() {
     <footer className="bg-graphite text-cream">
       <div className="mx-auto grid max-w-7xl gap-12 px-5 py-16 md:grid-cols-2 md:px-8 lg:grid-cols-4">
         <div>
-          <p className="font-serif text-2xl">
-            VM <span className="text-gold">Propiedades</span>
-          </p>
+          <div>
+            <Image src="/logo-m.png" alt="" width={392} height={400} loading="eager" className="h-16 w-auto brightness-0 invert" />
+            <div className="mt-3 flex items-center gap-2.5">
+              <Image src="/logo-palabra.png" alt="" width={1350} height={90} loading="eager" className="h-3.5 w-auto brightness-0 invert" />
+              <Image src="/logo-casa.png" alt="" width={162} height={200} loading="eager" className="h-8 w-auto brightness-0 invert" />
+            </div>
+            <span className="sr-only">VM Propiedades</span>
+          </div>
           <p className="mt-4 max-w-xs text-sm leading-relaxed text-cream/60">
             Más de 20 años acompañando a familias e inversores en Madrid con un
             trato cercano, profesional y transparente.

@@ -62,7 +62,8 @@ export default function Home() {
           sizes="100vw"
           className="object-cover"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-graphite/65 via-graphite/55 to-graphite/75" />
+        <div className="absolute inset-0 bg-gradient-to-b from-graphite/45 via-graphite/25 to-graphite/60" />
+        <div className="absolute inset-0 bg-[radial-gradient(70%_55%_at_50%_42%,rgba(28,27,25,0.5),transparent_75%)]" />
         <div className="relative mx-auto max-w-4xl px-5 text-center text-white">
           <h1 className="font-serif text-5xl leading-[1.05] tracking-tight md:text-7xl">
             VM Propiedades
@@ -159,8 +160,8 @@ export default function Home() {
               <Image
                 src="/logo.png"
                 alt="VM Propiedades"
-                width={490}
-                height={664}
+                width={518}
+                height={700}
                 className="hidden h-64 w-auto shrink-0 lg:block"
               />
             </div>

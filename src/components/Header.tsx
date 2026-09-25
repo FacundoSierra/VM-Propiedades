@@ -36,23 +36,32 @@ export default function Header() {
       }`}
     >
       <div className="mx-auto grid h-24 max-w-7xl grid-cols-[auto_1fr_auto] items-center gap-6 px-5 md:px-8">
-        <Link href="/" aria-label="Ir al inicio" className="shrink-0 justify-self-start">
+        <Link href="/" aria-label="Ir al inicio" className="flex shrink-0 items-center gap-2.5 justify-self-start">
           <Image
-            src="/logo.png"
-            alt="VM Propiedades"
-            width={490}
-            height={664}
+            src="/logo-m.png"
+            alt=""
+            width={392}
+            height={400}
             priority
-            className="h-16 w-auto"
+            className={`h-11 w-auto shrink-0 ${solid ? '' : 'brightness-0 invert'}`}
           />
+          <Image
+            src="/logo-palabra.png"
+            alt=""
+            width={1350}
+            height={90}
+            priority
+            className={`h-2.5 w-auto shrink-0 ${solid ? '' : 'brightness-0 invert'}`}
+          />
+          <span className="sr-only">VM Propiedades</span>
         </Link>
 
-        <nav className="hidden items-center justify-center gap-6 xl:flex">
+        <nav className="hidden items-center justify-center gap-4 xl:flex">
           {nav.map((item) => (
             <Link
               key={item.href}
               href={item.href}
-              className={`whitespace-nowrap text-sm font-medium uppercase tracking-wide transition-colors ${
+              className={`whitespace-nowrap text-[13px] font-medium uppercase tracking-wide transition-colors ${
                 pathname === item.href
                   ? "text-terracotta"
                   : solid
@@ -67,7 +76,7 @@ export default function Header() {
 
         <Link
           href="/valoracion"
-          className={`hidden whitespace-nowrap border px-5 py-3 text-sm font-medium uppercase tracking-wide transition-colors xl:inline-block xl:justify-self-end ${
+          className={`hidden whitespace-nowrap border px-4 py-3 text-[13px] font-medium uppercase tracking-wide transition-colors xl:inline-block xl:justify-self-end ${
             solid
               ? "border-terracotta bg-terracotta text-cream hover:bg-terracotta-dark"
               : "border-white/70 text-white hover:bg-white hover:text-graphite"
