@@ -1,40 +1,19 @@
 "use client";
 
-import { useState, useSyncExternalStore } from "react";
+import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { nav, site } from "@/lib/site";
 
-function subscribeToScroll(callback: () => void) {
-  window.addEventListener("scroll", callback, { passive: true });
-  return () => window.removeEventListener("scroll", callback);
-}
-
 export default function Header() {
   const pathname = usePathname();
-  const scrolled = useSyncExternalStore(
-    subscribeToScroll,
-    () => window.scrollY > 24,
-    () => false,
-  );
   const [open, setOpen] = useState(false);
 
   if (pathname?.startsWith("/admin")) return null;
 
-  // Solo la home tiene hero a pantalla completa bajo el header transparente
-  const transparentStart = pathname === "/";
-
-  const solid = scrolled || !transparentStart || open;
-
   return (
-    <header
-      className={`fixed inset-x-0 top-0 z-50 transition-all duration-300 ${
-        solid
-          ? "bg-cream/95 shadow-[0_1px_0_0_var(--color-line)] backdrop-blur"
-          : "bg-transparent"
-      }`}
-    >
+    <header className="fixed inset-x-0 top-0 z-50 bg-cream/95 shadow-[0_1px_0_0_var(--color-line)] backdrop-blur">
       <div className="mx-auto grid h-28 max-w-7xl grid-cols-[auto_1fr_auto] items-center gap-6 px-5 md:px-8">
         <Link
           href="/"
@@ -59,9 +38,7 @@ export default function Header() {
               className={`whitespace-nowrap text-[13px] font-medium uppercase tracking-wide transition-colors ${
                 pathname === item.href
                   ? "text-terracotta"
-                  : solid
-                    ? "text-graphite-soft hover:text-terracotta"
-                    : "text-white/85 hover:text-white"
+                  : "text-graphite-soft hover:text-terracotta"
               }`}
             >
               {item.label}
@@ -71,11 +48,7 @@ export default function Header() {
 
         <Link
           href="/valoracion"
-          className={`hidden whitespace-nowrap border px-4 py-3 text-[13px] font-medium uppercase tracking-wide transition-colors xl:inline-block xl:justify-self-end ${
-            solid
-              ? "border-terracotta bg-terracotta text-cream hover:bg-terracotta-dark"
-              : "border-white/70 text-white hover:bg-white hover:text-graphite"
-          }`}
+          className="hidden whitespace-nowrap border border-terracotta bg-terracotta px-4 py-3 text-[13px] font-medium uppercase tracking-wide text-cream transition-colors hover:bg-terracotta-dark xl:inline-block xl:justify-self-end"
         >
           Valoración gratuita
         </Link>
@@ -85,9 +58,7 @@ export default function Header() {
           aria-label={open ? "Cerrar menú" : "Abrir menú"}
           aria-expanded={open}
           onClick={() => setOpen((v) => !v)}
-          className={`col-start-3 flex h-10 w-10 flex-col items-center justify-center justify-self-end gap-1.5 xl:hidden ${
-            solid ? "text-graphite" : "text-white"
-          }`}
+          className="col-start-3 flex h-10 w-10 flex-col items-center justify-center justify-self-end gap-1.5 text-graphite xl:hidden"
         >
           <span
             className={`h-px w-6 bg-current transition-transform ${open ? "translate-y-[3.5px] rotate-45" : ""}`}
