@@ -55,13 +55,14 @@ export default function Home() {
       {/* Hero */}
       <section className="relative flex min-h-screen items-center justify-center">
         <Image
-          src="https://images.unsplash.com/photo-1449844908441-8829872d2607?auto=format&fit=crop&w=2400&q=80"
-          alt="Fachadas de edificios residenciales al atardecer"
+          src="/hero-madrid.jpg"
+          alt="Salón de una vivienda con ventanal y vistas a Madrid al atardecer"
           fill
           priority
+          sizes="100vw"
           className="object-cover"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-graphite/60 via-graphite/40 to-graphite/70" />
+        <div className="absolute inset-0 bg-gradient-to-b from-graphite/65 via-graphite/55 to-graphite/75" />
         <div className="relative mx-auto max-w-4xl px-5 text-center text-white">
           <h1 className="font-serif text-5xl leading-[1.05] tracking-tight md:text-7xl">
             VM Propiedades
