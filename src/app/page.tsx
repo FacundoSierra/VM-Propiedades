@@ -53,7 +53,8 @@ export default function Home() {
   return (
     <>
       {/* Hero */}
-      <section className="relative flex min-h-screen items-center justify-center">
+      {/* La cabecera ya no es transparente: la portada empieza justo debajo y ocupa el resto de la pantalla */}
+      <section className="relative mt-28 flex min-h-[calc(100vh-7rem)] items-center justify-center">
         <Image
           src="/hero-madrid.jpg"
           alt="Salón de una vivienda con ventanal y vistas a Madrid al atardecer"
