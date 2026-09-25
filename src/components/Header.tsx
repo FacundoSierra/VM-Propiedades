@@ -35,7 +35,7 @@ export default function Header() {
           : "bg-transparent"
       }`}
     >
-      <div className="mx-auto grid h-24 max-w-7xl grid-cols-[auto_1fr_auto] items-center gap-6 px-5 md:px-8">
+      <div className="mx-auto grid h-28 max-w-7xl grid-cols-[auto_1fr_auto] items-center gap-6 px-5 md:px-8">
         <Link
           href="/"
           aria-label="Ir al inicio"
@@ -47,7 +47,7 @@ export default function Header() {
             width={519}
             height={700}
             priority
-            className={`h-[4.5rem] w-auto ${solid ? "" : "brightness-0 invert"}`}
+            className={`h-24 w-auto ${solid ? "" : "brightness-0 invert"}`}
           />
         </Link>
 
