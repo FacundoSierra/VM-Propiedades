@@ -11,7 +11,6 @@ export const site = {
   address: "Madrid, España",
   social: {
     instagram: "https://www.instagram.com/vm_propiedades_madrid/",
-    facebook: "https://www.facebook.com/vmpropiedades",
   },
 } as const;
 
