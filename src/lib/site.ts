@@ -10,7 +10,7 @@ export const site = {
   whatsappUrl: "https://wa.me/34685187399",
   address: "Madrid, España",
   social: {
-    instagram: "https://www.instagram.com/vmpropiedades",
+    instagram: "https://www.instagram.com/vm_propiedades_madrid/",
     facebook: "https://www.facebook.com/vmpropiedades",
   },
 } as const;
