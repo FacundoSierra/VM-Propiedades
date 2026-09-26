@@ -15,6 +15,18 @@ export const site = {
   },
 } as const;
 
+/**
+ * Datos del titular para el aviso legal y la política de privacidad (LSSI-CE y RGPD).
+ * En cuanto VM Propiedades los facilite se rellenan aquí y aparecen solos en las dos
+ * páginas; mientras estén vacíos, esas líneas no se muestran.
+ */
+export const legal: {
+  razonSocial?: string;
+  nif?: string;
+  domicilio?: string;
+  registrales?: string;
+} = {};
+
 export const nav = [
   { href: "/", label: "Inicio" },
   { href: "/inmuebles", label: "Inmuebles" },

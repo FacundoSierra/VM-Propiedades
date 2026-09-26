@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import LegalPage from "@/components/LegalPage";
-import { site } from "@/lib/site";
+import { legal, site } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "Política de privacidad",
@@ -17,8 +17,15 @@ export default function PrivacidadPage() {
       </p>
       <h2>Responsable del tratamiento</h2>
       <p>
-        {site.name} · {site.email} · {site.phone}. [Completar con razón social y
-        NIF antes de publicar.]
+        {[
+          legal.razonSocial ?? site.name,
+          legal.nif && `NIF: ${legal.nif}`,
+          legal.domicilio ?? site.address,
+          site.email,
+          site.phone,
+        ]
+          .filter(Boolean)
+          .join(" · ")}
       </p>
       <h2>Finalidad</h2>
       <p>

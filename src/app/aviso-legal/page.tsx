@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import LegalPage from "@/components/LegalPage";
-import { site } from "@/lib/site";
+import { legal, site } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "Aviso legal",
@@ -17,9 +17,16 @@ export default function AvisoLegalPage() {
       </p>
       <h2>Datos identificativos</h2>
       <p>
-        Titular: {site.name} · Email: {site.email} · Teléfono: {site.phone} ·
-        Domicilio: {site.address}. [Completar con razón social, NIF y datos
-        registrales antes de publicar.]
+        {[
+          `Titular: ${legal.razonSocial ?? site.name}`,
+          legal.nif && `NIF: ${legal.nif}`,
+          `Domicilio: ${legal.domicilio ?? site.address}`,
+          `Email: ${site.email}`,
+          `Teléfono: ${site.phone}`,
+          legal.registrales && `Datos registrales: ${legal.registrales}`,
+        ]
+          .filter(Boolean)
+          .join(" · ")}
       </p>
       <h2>Objeto</h2>
       <p>
