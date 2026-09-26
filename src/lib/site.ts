@@ -16,15 +16,18 @@ export const site = {
 
 /**
  * Datos del titular para el aviso legal y la política de privacidad (LSSI-CE y RGPD).
- * En cuanto VM Propiedades los facilite se rellenan aquí y aparecen solos en las dos
- * páginas; mientras estén vacíos, esas líneas no se muestran.
+ * Lo que esté vacío no se muestra: al rellenarlo aquí aparece solo en las dos páginas.
+ * Falta el domicilio fiscal, que ahora sale como `site.address` ("Madrid, España").
  */
 export const legal: {
   razonSocial?: string;
   nif?: string;
   domicilio?: string;
   registrales?: string;
-} = {};
+} = {
+  razonSocial: "Andrea Valentina Morales Pérez",
+  nif: "X8136817S",
+};
 
 export const nav = [
   { href: "/", label: "Inicio" },

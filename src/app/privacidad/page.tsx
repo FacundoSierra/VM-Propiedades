@@ -18,7 +18,7 @@ export default function PrivacidadPage() {
       <h2>Responsable del tratamiento</h2>
       <p>
         {[
-          legal.razonSocial ?? site.name,
+          legal.razonSocial ? `${legal.razonSocial} (${site.name})` : site.name,
           legal.nif && `NIF: ${legal.nif}`,
           legal.domicilio ?? site.address,
           site.email,

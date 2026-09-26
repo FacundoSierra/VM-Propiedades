@@ -13,7 +13,9 @@ export default function AvisoLegalPage() {
       <p>
         En cumplimiento de la Ley 34/2002, de 11 de julio, de Servicios de la
         Sociedad de la Información y de Comercio Electrónico (LSSI-CE), se
-        informa de que este sitio web es titularidad de <strong>{site.name}</strong>.
+        informa de que este sitio web es titularidad de{" "}
+        <strong>{legal.razonSocial ?? site.name}</strong>
+        {legal.razonSocial ? `, que opera como ${site.name}` : null}.
       </p>
       <h2>Datos identificativos</h2>
       <p>
