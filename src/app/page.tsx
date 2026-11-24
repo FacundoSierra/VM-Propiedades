@@ -5,7 +5,7 @@ import ValuationForm from "@/components/forms/ValuationForm";
 import PropertyCard from "@/components/PropertyCard";
 import Reveal from "@/components/Reveal";
 import SectionHeading from "@/components/SectionHeading";
-import { getFeatured } from "@/data/properties";
+import { getFeatured } from "@/lib/propertiesStore";
 import { site } from "@/lib/site";
 
 const services = [
@@ -47,8 +47,11 @@ const services = [
   },
 ];
 
-export default function Home() {
-  const featured = getFeatured();
+// Página estática que se rehace cuando el panel guarda (etiqueta `properties`) o, como mucho, cada hora.
+export const revalidate = 3600;
+
+export default async function Home() {
+  const featured = await getFeatured();
 
   return (
     <>

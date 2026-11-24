@@ -7,7 +7,11 @@ import type {
   PropertyStatus,
   PropertyType,
 } from "@/data/properties";
-import { propertyStatusLabels, propertyTypeLabels } from "@/data/properties";
+import {
+  propertyStatusLabels,
+  propertyTypeLabels,
+  publicStatuses,
+} from "@/data/properties";
 import PropertyCard from "./PropertyCard";
 
 interface PropertiesCatalogProps {
@@ -132,9 +136,9 @@ export default function PropertiesCatalog({
             className="field w-44"
           >
             <option value="todas">Todos los estados</option>
-            {Object.entries(propertyStatusLabels).map(([value, label]) => (
+            {publicStatuses.map((value) => (
               <option key={value} value={value}>
-                {label}
+                {propertyStatusLabels[value]}
               </option>
             ))}
           </select>

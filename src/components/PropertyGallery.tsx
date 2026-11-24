@@ -11,6 +11,15 @@ interface PropertyGalleryProps {
 export default function PropertyGallery({ images, title }: PropertyGalleryProps) {
   const [active, setActive] = useState(0);
 
+  // En la web siempre hay al menos una foto; sin ninguna solo se llega desde la vista previa del panel.
+  if (images.length === 0) {
+    return (
+      <div className="grid aspect-[16/10] place-items-center bg-cream-dark text-sm text-graphite-soft">
+        Todavía no hay fotos
+      </div>
+    );
+  }
+
   return (
     <div>
       <div className="relative aspect-[16/10] overflow-hidden bg-cream-dark">

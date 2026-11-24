@@ -7,13 +7,16 @@ import { useFormSubmit } from "./useFormSubmit";
 interface ContactFormProps {
   /** Asunto precargado, p. ej. el título de un inmueble. */
   subject?: string;
+  /** Vista previa del panel: el botón de enviar se queda desactivado y no se manda nada. */
+  preview?: boolean;
 }
 
-export default function ContactForm({ subject }: ContactFormProps) {
+export default function ContactForm({ subject, preview = false }: ContactFormProps) {
   const { status, error, submit } = useFormSubmit();
 
   function onSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    if (preview) return;
     const form = new FormData(e.currentTarget);
     submit({
       formType: "contacto",
@@ -135,7 +138,12 @@ export default function ContactForm({ subject }: ContactFormProps) {
         />
         <span>
           He leído y aceptado la{" "}
-          <Link href="/privacidad" className="underline hover:text-terracotta">
+          <Link
+            href="/privacidad"
+            // En la vista previa, en otra pestaña: así no se sale del editor.
+            target={preview ? "_blank" : undefined}
+            className="underline hover:text-terracotta"
+          >
             Política de Privacidad
           </Link>
           *
@@ -146,7 +154,7 @@ export default function ContactForm({ subject }: ContactFormProps) {
       )}
       <button
         type="submit"
-        disabled={status === "sending"}
+        disabled={preview || status === "sending"}
         className="w-full bg-terracotta px-6 py-3.5 text-[13px] font-medium uppercase tracking-widest text-cream transition-colors hover:bg-terracotta-dark disabled:opacity-60 sm:w-auto"
       >
         {status === "sending" ? "Enviando…" : "Enviar mensaje"}

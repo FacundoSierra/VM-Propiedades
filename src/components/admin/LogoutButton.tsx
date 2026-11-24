@@ -1,13 +1,24 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { logout } from "@/lib/adminApi";
+import { usePanelHref } from "./PanelLinks";
 
-export default function LogoutButton() {
+const headerStyle =
+  "inline-flex min-h-11 items-center font-medium text-panel-muted transition-colors hover:text-panel-ink disabled:opacity-60 md:min-h-0";
+
+/** Sin `className`, el «Salir» discreto de la barra de arriba. */
+export default function LogoutButton({ className = headerStyle }: { className?: string }) {
   const router = useRouter();
+  const href = usePanelHref();
+  const [leaving, setLeaving] = useState(false);
 
   async function handleLogout() {
-    await fetch("/api/admin/logout", { method: "POST" });
-    router.push("/admin/login");
+    setLeaving(true);
+    // Aunque falle la llamada, se le lleva a entrar: si la sesión sigue viva, el panel le deja pasar.
+    await logout().catch(() => undefined);
+    router.push(href("/login"));
     router.refresh();
   }
 
@@ -15,9 +26,12 @@ export default function LogoutButton() {
     <button
       type="button"
       onClick={handleLogout}
-      className="text-[13px] uppercase tracking-widest text-graphite-soft underline hover:text-terracotta"
+      disabled={leaving}
+      // El editor avisa antes de salir si hay cambios sin guardar.
+      data-leave-guard
+      className={className}
     >
-      Cerrar sesión
+      Salir
     </button>
   );
 }

@@ -15,6 +15,36 @@
   --font-sans: var(--font-inter), system-ui, -apple-system, sans-serif;
 }
 
+/*
+ * Colores del panel (/admin). Solo dan nombre a las clases (`bg-panel-surface`…):
+ * los valores viven en `src/app/admin/panel.css`, dentro de `.panel`, así que
+ * fuera del panel no pintan nada y la web pública no cambia.
+ */
+@theme inline {
+  --color-panel-bg: var(--panel-bg);
+  --color-panel-surface: var(--panel-surface);
+  --color-panel-surface-2: var(--panel-surface-2);
+  --color-panel-line: var(--panel-line);
+  --color-panel-line-strong: var(--panel-line-strong);
+  --color-panel-field: var(--panel-field);
+  --color-panel-ink: var(--panel-ink);
+  --color-panel-text: var(--panel-text);
+  --color-panel-muted: var(--panel-muted);
+  --color-panel-accent: var(--panel-accent);
+  --color-panel-accent-dark: var(--panel-accent-dark);
+  --color-panel-error: var(--panel-error);
+  --color-panel-ok-bg: var(--panel-ok-bg);
+  --color-panel-ok-ink: var(--panel-ok-ink);
+  --color-panel-res-bg: var(--panel-res-bg);
+  --color-panel-res-ink: var(--panel-res-ink);
+  --color-panel-ven-bg: var(--panel-ven-bg);
+  --color-panel-ven-ink: var(--panel-ven-ink);
+  --color-panel-bor-bg: var(--panel-bor-bg);
+  --color-panel-bor-ink: var(--panel-bor-ink);
+  --color-panel-ocu-bg: var(--panel-ocu-bg);
+  --color-panel-ocu-ink: var(--panel-ocu-ink);
+}
+
 html {
   scroll-behavior: smooth;
 }

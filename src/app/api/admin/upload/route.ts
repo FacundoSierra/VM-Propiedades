@@ -1,49 +1,54 @@
 import { handleUpload, type HandleUploadBody } from "@vercel/blob/client";
 import { NextResponse } from "next/server";
 
+import { PHOTO_PREFIX } from "@/lib/photoCleanup";
+import { jsonError, requireTeam } from "@/lib/panelAuth";
+
 /**
- * Genera el token de subida directa a Vercel Blob. El archivo en sí NO pasa
- * por esta función (eso limitaría cada foto a 4,5 MB, el máximo de cuerpo
- * de una función de Vercel) — el navegador sube el archivo directamente a
- * Blob usando el token que devolvemos aquí.
+ * Firma la subida directa de una foto a Vercel Blob (REQ-001, 5.2). La foto no
+ * pasa por aquí (las funciones de Vercel no admiten más de 4,5 MB): el navegador
+ * la sube directamente con el token que se devuelve.
+ *
+ * - Solo para cuentas del equipo (401 sin sesión, 403 si no es del equipo).
+ * - Solo bajo `inmuebles/`, JPEG, PNG o WebP y como mucho 15 MB.
+ * - Sin `onUploadCompleted`: Vercel no llama de vuelta a esta ruta, así que se
+ *   puede proteger entera. La URL se guarda en la base al pulsar «Guardar».
  */
+const UPLOAD_FAILED = "No se pudo preparar la subida";
+
 export async function POST(request: Request) {
-  const body = (await request.json()) as HandleUploadBody;
+  const auth = await requireTeam(request);
+  if (!auth.ok) return auth.response;
+
+  let body: HandleUploadBody;
+  try {
+    body = (await request.json()) as HandleUploadBody;
+  } catch {
+    return jsonError(400, UPLOAD_FAILED);
+  }
 
   try {
     const jsonResponse = await handleUpload({
       body,
       request,
-      onBeforeGenerateToken: async () => {
+      onBeforeGenerateToken: async (pathname) => {
+        if (!pathname.startsWith(PHOTO_PREFIX) || pathname.includes("..")) {
+          throw new Error(`Ruta de subida no permitida: ${pathname}`);
+        }
         return {
-          allowedContentTypes: [
-            "image/jpeg",
-            "image/png",
-            "image/webp",
-            "image/gif",
-            "image/heic",
-            "image/heif",
-          ],
+          // El panel comprime cada foto en el navegador (JPEG de 1800 px). PNG
+          // y WebP quedan por si una no se pudiera comprimir.
+          allowedContentTypes: ["image/jpeg", "image/png", "image/webp"],
+          maximumSizeInBytes: 15 * 1024 * 1024,
           addRandomSuffix: true,
-          maximumSizeInBytes: 25 * 1024 * 1024, // 25 MB por foto
+          // El nombre no se repite nunca (sufijo al azar): se puede guardar un año.
+          cacheControlMaxAge: 31_536_000,
         };
       },
-      onUploadCompleted: async ({ blob }) => {
-        console.log("[admin/upload] Subida completada:", blob.url);
-      },
     });
-
     return NextResponse.json(jsonResponse);
   } catch (error) {
-    console.error("[admin/upload] Error generando token de subida:", error);
-    return NextResponse.json(
-      {
-        error:
-          error instanceof Error
-            ? error.message
-            : "No se pudo preparar la subida",
-      },
-      { status: 400 },
-    );
+    console.error("[admin/upload] No se ha podido firmar la subida:", error);
+    return jsonError(400, UPLOAD_FAILED);
   }
 }

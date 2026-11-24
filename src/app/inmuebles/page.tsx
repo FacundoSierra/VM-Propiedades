@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import PageHero from "@/components/PageHero";
 import PropertiesCatalog from "@/components/PropertiesCatalog";
-import { properties, zones } from "@/data/properties";
+import { getPublicProperties, getZones } from "@/lib/propertiesStore";
 
 export const metadata: Metadata = {
   title: "Inmuebles en venta y alquiler en Madrid",
@@ -9,7 +9,12 @@ export const metadata: Metadata = {
     "Catálogo de pisos, áticos, chalets, lofts y locales en Madrid. Filtra por operación, tipo, zona y precio.",
 };
 
-export default function InmueblesPage() {
+// Página estática que se rehace cuando el panel guarda (etiqueta `properties`) o, como mucho, cada hora.
+export const revalidate = 3600;
+
+export default async function InmueblesPage() {
+  const [properties, zones] = await Promise.all([getPublicProperties(), getZones()]);
+
   return (
     <>
       <PageHero

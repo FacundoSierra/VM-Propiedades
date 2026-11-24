@@ -3,14 +3,17 @@
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useSelectedLayoutSegment } from "next/navigation";
 import { nav, site } from "@/lib/site";
 
 export default function Header() {
   const pathname = usePathname();
+  const segment = useSelectedLayoutSegment();
   const [open, setOpen] = useState(false);
 
-  if (pathname?.startsWith("/admin")) return null;
+  // En el panel no sale. Se mira el segmento de la ruta y no la dirección: en
+  // panel.vm-propiedades.es la dirección no lleva /admin (ADR-002).
+  if (segment === "admin") return null;
 
   return (
     <header className="fixed inset-x-0 top-0 z-50 bg-cream/95 shadow-[0_1px_0_0_var(--color-line)] backdrop-blur">

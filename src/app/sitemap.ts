@@ -1,8 +1,13 @@
 import type { MetadataRoute } from "next";
-import { properties } from "@/data/properties";
+import { getPublicProperties } from "@/lib/propertiesStore";
 import { site } from "@/lib/site";
 
-export default function sitemap(): MetadataRoute.Sitemap {
+// Se rehace cuando el panel guarda (etiqueta `properties`) o, como mucho, cada hora.
+export const revalidate = 3600;
+
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const properties = await getPublicProperties();
+
   const staticRoutes = [
     "",
     "/quienes-somos",
@@ -20,9 +25,10 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: path === "" ? 1 : 0.7,
   }));
 
+  // Las fichas, con la fecha de su último guardado (la pone la base).
   const propertyRoutes = properties.map((p) => ({
     url: `${site.url}/inmuebles/${p.slug}`,
-    lastModified: new Date(),
+    lastModified: p.updatedAt ? new Date(p.updatedAt) : new Date(),
     changeFrequency: "weekly" as const,
     priority: 0.8,
   }));

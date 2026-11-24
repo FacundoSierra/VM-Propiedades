@@ -4,7 +4,7 @@ import PageHero from "@/components/PageHero";
 import PropertyCard from "@/components/PropertyCard";
 import Reveal from "@/components/Reveal";
 import SectionHeading from "@/components/SectionHeading";
-import { properties } from "@/data/properties";
+import { getPublicProperties } from "@/lib/propertiesStore";
 
 export const metadata: Metadata = {
   title: "Alquiler de viviendas y locales en Madrid",
@@ -12,8 +12,11 @@ export const metadata: Metadata = {
     "Gestión integral del alquiler en Madrid: selección de inquilinos, contratos sólidos y tranquilidad para propietarios e inquilinos.",
 };
 
-export default function AlquilerPage() {
-  const rentals = properties.filter((p) => p.operation === "alquiler");
+// Página estática que se rehace cuando el panel guarda (etiqueta `properties`) o, como mucho, cada hora.
+export const revalidate = 3600;
+
+export default async function AlquilerPage() {
+  const rentals = (await getPublicProperties()).filter((p) => p.operation === "alquiler");
 
   return (
     <>

@@ -4,6 +4,12 @@ export const site = {
   description:
     "Agencia inmobiliaria boutique en Madrid con más de 20 años de experiencia. Compra-venta, alquiler, gestoría, financiación y valoración gratuita.",
   url: "https://www.vm-propiedades.es",
+  /**
+   * El panel de inmuebles, en su propio subdominio (ADR-002). Es la misma app de
+   * Next que la web: `src/proxy.ts` reparte por dominio. Si cambia, cambia
+   * también la `Site URL` de Supabase Auth y el `matcher` de `src/proxy.ts`.
+   */
+  panelUrl: "https://panel.vm-propiedades.es",
   email: "gestion@vm-propiedades.es",
   phone: "685 187 399",
   phoneHref: "+34685187399",

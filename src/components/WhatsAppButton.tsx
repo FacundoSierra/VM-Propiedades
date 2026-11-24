@@ -1,11 +1,12 @@
 "use client";
 
-import { usePathname } from "next/navigation";
+import { useSelectedLayoutSegment } from "next/navigation";
 import { site } from "@/lib/site";
 
 export default function WhatsAppButton() {
-  const pathname = usePathname();
-  if (pathname?.startsWith("/admin")) return null;
+  // En el panel no sale. Se mira el segmento de la ruta y no la dirección: en
+  // panel.vm-propiedades.es la dirección no lleva /admin (ADR-002).
+  if (useSelectedLayoutSegment() === "admin") return null;
 
   return (
     <a
