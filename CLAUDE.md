@@ -53,7 +53,7 @@ Web de VM Propiedades, agencia inmobiliaria en Madrid: presentación y servicios
   - Cada guardado la invalida con `revalidateTag('properties', { expire: 0 })`, y sale en la primera recarga, sin redesplegar.
   - No usar `revalidatePath` (ver spec 6.4).
   - Si la base falla, la lectura lanza el error: nunca sirve un catálogo vacío.
-- **Fotos**: siguen en Vercel Blob. El navegador las comprime (JPEG de 1800 px) y las sube directamente. Tras cada guardado, `photoCleanup.ts` borra las huérfanas, y no borra nada si no ha podido leer la cartera entera.
+- **Fotos**: siguen en Vercel Blob. **El almacén tiene que ser público** (*Access: Public*): uno privado rechaza las subidas, y en la consola sale como un error de CORS (pasó el 2026-11-25). El navegador las comprime (JPEG de 1800 px) y las sube directamente. Tras cada guardado, `photoCleanup.ts` borra las huérfanas, y no borra nada si no ha podido leer la cartera entera.
 - **Claves**: en Vercel solo están la URL y la clave publicable de Supabase. Nunca poner la `sb_secret_` ni la `service_role`: se saltan el RLS, y el código se niega a arrancar con ellas.
 - **La base despierta**: Vercel Cron llama cada día a `/api/salud` (con `CRON_SECRET`), para que la base gratuita no se pause.
 - **Columnas**: toda lectura de la base nombra sus columnas, también después de `insert` o `update`. `select('*')` da 42501 por `created_at`.
