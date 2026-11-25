@@ -6,7 +6,7 @@
  * Cada función devuelve lo que pide o lanza un `AdminApiError` con la frase
  * que se le puede enseñar tal cual a quien usa el panel.
  */
-import { upload } from "@vercel/blob/client";
+import { uploadPresigned } from "@vercel/blob/client";
 import type { Property } from "@/data/properties";
 import { slugify } from "@/lib/propertyRules";
 
@@ -133,7 +133,7 @@ export async function uploadPhoto(
 ): Promise<string> {
   const base = slugify(originalName.replace(/\.[^.]+$/, "")) || "foto";
   try {
-    const blob = await upload(`inmuebles/${Date.now()}-${base}.jpg`, photo, {
+    const blob = await uploadPresigned(`inmuebles/${Date.now()}-${base}.jpg`, photo, {
       access: "public",
       handleUploadUrl: "/api/admin/upload",
       contentType: photo.type || "image/jpeg",
