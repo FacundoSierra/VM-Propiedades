@@ -128,7 +128,7 @@ export default function PropertyDetail({ property, related = [], preview = false
               Escríbenos y organizamos una visita sin compromiso.
             </p>
             <div className="mt-6">
-              <ContactForm subject={property.title} preview={preview} />
+              <ContactForm subject={property.title} propertySlug={property.slug} preview={preview} />
             </div>
             <div className="mt-6 border-t border-line pt-5 text-center text-sm text-graphite-soft">
               <p>

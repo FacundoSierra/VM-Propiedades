@@ -8,11 +8,16 @@ import { useFormSubmit } from "./useFormSubmit";
 interface ContactFormProps {
   /** Asunto precargado, p. ej. el título de un inmueble. */
   subject?: string;
+  /**
+   * El `slug` del inmueble, si el formulario está en su ficha. El servidor lee
+   * con él los datos del piso para el correo (precio, zona, enlaces).
+   */
+  propertySlug?: string;
   /** Vista previa del panel: el botón de enviar se queda desactivado y no se manda nada. */
   preview?: boolean;
 }
 
-export default function ContactForm({ subject, preview = false }: ContactFormProps) {
+export default function ContactForm({ subject, propertySlug, preview = false }: ContactFormProps) {
   const { status, error, submit } = useFormSubmit();
 
   function onSubmit(e: FormEvent<HTMLFormElement>) {
@@ -20,7 +25,8 @@ export default function ContactForm({ subject, preview = false }: ContactFormPro
     if (preview) return;
     const form = new FormData(e.currentTarget);
     submit({
-      formType: "contacto",
+      formType: propertySlug ? "inmueble" : "contacto",
+      inmueble: propertySlug,
       asunto: subject ?? form.get("asunto"),
       nombre: form.get("nombre"),
       email: form.get("email"),
