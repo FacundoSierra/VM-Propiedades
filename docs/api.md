@@ -81,7 +81,7 @@ La llama Vercel Cron una vez al día (`vercel.json`, `0 6 * * *`) para que el pr
 
 ## Webhooks e integraciones
 - **Supabase**: Postgres con RLS (la base) y Auth (las cuentas). En Vercel solo están la URL y la clave publicable: ninguna clave secreta de Supabase.
-- **Vercel Blob**: las fotos. `BLOB_READ_WRITE_TOKEN` firma las subidas y borra las huérfanas. Sin `onUploadCompleted`: Vercel no llama de vuelta a ninguna ruta.
+- **Vercel Blob**: las fotos, en un almacén **público**, con el sistema sin clave (`BLOB_STORE_ID` y las credenciales OIDC de Vercel; no hay `BLOB_READ_WRITE_TOKEN`). `/api/admin/upload` pide con `issueSignedToken` un permiso solo para esa foto, y lo devuelve firmado con `handleUploadPresigned`. El navegador sube con `uploadPresigned`. `list` y `del`, para las huérfanas, usan las mismas credenciales. Sin `onUploadCompleted`: Vercel no llama de vuelta a ninguna ruta.
 - **Resend**: los formularios de la web (`RESEND_API_KEY`) y, aparte, el SMTP de Supabase Auth con su propia clave, guardada en Supabase y no en Vercel.
 - **Vercel Cron**: `/api/salud`, una vez al día.
 - No hay webhooks entrantes.

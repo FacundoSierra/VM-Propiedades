@@ -60,7 +60,7 @@ Web de VM Propiedades, agencia inmobiliaria en Madrid: presentación y servicios
 - **Datos fuera del repo**: los inmuebles ya no están en él. No hay `properties.json` ni hace falta `git pull` antes de tocar nada.
 
 ## Variables de entorno (ver `.env.local.example`)
-`NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`, `CRON_SECRET` (solo Production), `BLOB_READ_WRITE_TOKEN`, `RESEND_API_KEY`, `RESEND_FROM_EMAIL`
+`NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`, `CRON_SECRET` (solo Production), `BLOB_STORE_ID` y `BLOB_WEBHOOK_PUBLIC_KEY` (las pone Vercel al conectar Blob; no hay `BLOB_READ_WRITE_TOKEN`: las subidas van con `issueSignedToken` y `uploadPresigned`), `RESEND_API_KEY`, `RESEND_FROM_EMAIL`
 
 ## Reglas
 - Lee `AGENTS.md` antes de programar: esta versión de Next.js tiene cambios incompatibles con versiones anteriores

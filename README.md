@@ -22,7 +22,7 @@ Están explicadas en `.env.local.example`:
 - `NEXT_PUBLIC_SUPABASE_URL`
 - `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`
 - `CRON_SECRET`
-- `BLOB_READ_WRITE_TOKEN`
+- `BLOB_STORE_ID` y `BLOB_WEBHOOK_PUBLIC_KEY` (las pone Vercel al conectar el almacén de Blob, que tiene que ser público)
 - `RESEND_API_KEY`
 - `RESEND_FROM_EMAIL`
 

@@ -674,14 +674,14 @@ export async function changePassword(current: string, password: string): Promise
 |---|---|---|---|---|
 | `NEXT_PUBLIC_SUPABASE_URL` | `https://<ref>.supabase.co` | la misma | la misma | No |
 | `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` | `sb_publishable_…` | la misma | la misma | No (va en el navegador y la protege el RLS) |
-| `BLOB_READ_WRITE_TOKEN` | ya está | ya está | ya está | Sí |
+| `BLOB_STORE_ID` y `BLOB_WEBHOOK_PUBLIC_KEY` | las pone Vercel al conectar el almacén (público) | las mismas | `vercel env pull` | No (las credenciales son las OIDC de Vercel). Cambiado el 2026-11-25: no hay `BLOB_READ_WRITE_TOKEN`, y las subidas van con `issueSignedToken` y `uploadPresigned` |
 | `CRON_SECRET` | 32 letras y números al azar | — | — | Sí |
 | `RESEND_API_KEY`, `RESEND_FROM_EMAIL` | sin cambios (formularios) | | | Sí / No |
 | `ADMIN_PASSWORD`, `GITHUB_TOKEN` | **se borran** después de comprobar producción (sección 13) | se borran | se borran | |
 
 - No hay `SUPABASE_SECRET_KEY` ni la cadena de conexión en Vercel.
 - `.env.local.example` ya lleva esta lista. `ADMIN_PASSWORD` y `GITHUB_TOKEN` no están: el código ya no los lee.
-- **Hecho (2026-11-25)**: las dos de Supabase en los tres entornos y `CRON_SECRET` en Production. `BLOB_READ_WRITE_TOKEN` ya estaba, con el almacén conectado.
+- **Hecho (2026-11-25)**: las dos de Supabase en los tres entornos y `CRON_SECRET` en Production. Blob, al principio en un almacén privado: rechazaba las subidas. Se cambió por uno público, que Vercel conecta sin clave (`BLOB_STORE_ID`). Por eso la subida pasó a `issueSignedToken` y `uploadPresigned`.
 - La dirección del panel no es una variable: está en `site.panelUrl` (`src/lib/site.ts`).
 
 ---
