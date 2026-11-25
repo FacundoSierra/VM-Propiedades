@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import type { FormEvent } from "react";
+import { site } from "@/lib/site";
 import { useFormSubmit } from "./useFormSubmit";
 
 interface ContactFormProps {
@@ -138,14 +139,23 @@ export default function ContactForm({ subject, preview = false }: ContactFormPro
         />
         <span>
           He leído y aceptado la{" "}
-          <Link
-            href="/privacidad"
-            // En la vista previa, en otra pestaña: así no se sale del editor.
-            target={preview ? "_blank" : undefined}
-            className="underline hover:text-terracotta"
-          >
-            Política de Privacidad
-          </Link>
+          {preview ? (
+            // En la vista previa del panel: en otra pestaña, para no salir del
+            // editor, y con el dominio de la web, porque el panel vive en otro
+            // dominio (`panel.`) donde `/privacidad` no existe.
+            <a
+              href={`${site.url}/privacidad`}
+              target="_blank"
+              rel="noopener"
+              className="underline hover:text-terracotta"
+            >
+              Política de Privacidad
+            </a>
+          ) : (
+            <Link href="/privacidad" className="underline hover:text-terracotta">
+              Política de Privacidad
+            </Link>
+          )}
           *
         </span>
       </label>
